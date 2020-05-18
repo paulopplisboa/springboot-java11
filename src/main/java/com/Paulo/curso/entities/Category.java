@@ -11,6 +11,10 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.ManyToMany;
+
 @Entity
 @Table(name = "tb_category")
 public class Category implements Serializable {
@@ -22,6 +26,8 @@ public class Category implements Serializable {
 	private String name;
 
 	@Transient  // impede de ser interpretada 
+	@ManyToMany(mappedBy = "categories")
+	@JsonIgnore
 	private Set<Product> products = new HashSet<>();
 
 	public Category() {
