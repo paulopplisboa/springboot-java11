@@ -11,12 +11,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.Paulo.curso.entities.enums.OrderStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
 @Table(name = "tb_order")
 public class Order implements Serializable {
 	private static final long serialVersionUID = 1L;
+	
+	private Integer orderstatus;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,10 +35,11 @@ public class Order implements Serializable {
 	public Order() {
 	}
 
-	public Order(Long id, Instant moment, User client) {
+	public Order(Long id, Instant moment, OrderStatus orderstatus, User client) {
 		super();
 		this.id = id;
 		this.moment = moment;
+		setOrderstatus(orderstatus);
 		this.client = client;
 	}
 
@@ -57,6 +61,18 @@ public class Order implements Serializable {
 
 	public User getClient() {
 		return client;
+	}
+	
+	
+
+	public OrderStatus getOrderstatus() {
+		return OrderStatus.valueOf(orderstatus);
+	}
+
+	public void setOrderstatus(OrderStatus orderstatus) {
+		if (orderstatus != null ) {
+		this.orderstatus = orderstatus.getCode();
+		}
 	}
 
 	public void setClient(User client) {
