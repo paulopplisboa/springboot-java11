@@ -2,6 +2,8 @@ package com.Paulo.curso.entities;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.Paulo.curso.entities.enums.OrderStatus;
@@ -18,8 +21,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 @Table(name = "tb_order")
 public class Order implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
-	private Integer orderstatus;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,19 +28,24 @@ public class Order implements Serializable {
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
 	private Instant moment;
+	
+	private Integer orderStatus;
 
 	@ManyToOne
 	@JoinColumn(name = "client_id")
 	private User client;
 
+	@OneToMany(mappedBy = "id.order")
+	private Set<OrderItem> items = new HashSet<>();
+	
 	public Order() {
 	}
 
-	public Order(Long id, Instant moment, OrderStatus orderstatus, User client) {
+	public Order(Long id, Instant moment, OrderStatus orderStatus, User client) {
 		super();
 		this.id = id;
 		this.moment = moment;
-		setOrderstatus(orderstatus);
+		setOrderStatus(orderStatus);
 		this.client = client;
 	}
 
@@ -58,27 +64,29 @@ public class Order implements Serializable {
 	public void setMoment(Instant moment) {
 		this.moment = moment;
 	}
+	
+	public OrderStatus getOrderStatus() {
+		return OrderStatus.valueOf(orderStatus);
+	}
+
+	public void setOrderStatus(OrderStatus orderStatus) {
+		if (orderStatus != null) {
+			this.orderStatus = orderStatus.getCode();
+		}
+	}
 
 	public User getClient() {
 		return client;
-	}
-	
-	
-
-	public OrderStatus getOrderstatus() {
-		return OrderStatus.valueOf(orderstatus);
-	}
-
-	public void setOrderstatus(OrderStatus orderstatus) {
-		if (orderstatus != null ) {
-		this.orderstatus = orderstatus.getCode();
-		}
 	}
 
 	public void setClient(User client) {
 		this.client = client;
 	}
 
+	public Set<OrderItem> getItems() {
+		return items;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -103,5 +111,4 @@ public class Order implements Serializable {
 			return false;
 		return true;
 	}
-
 }

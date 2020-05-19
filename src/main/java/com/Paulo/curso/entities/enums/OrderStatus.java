@@ -2,7 +2,7 @@ package com.Paulo.curso.entities.enums;
 
 public enum OrderStatus {
 
-	WHAITING_PAYMENT(0), PAID(1), SHIPPED(2), DELIVERED(3), CANCELED(4);
+	WAITING_PAYMENT(0), PAID(1), SHIPPED(2), DELIVERED(3), CANCELED(4);
 
 	private int code;
 
